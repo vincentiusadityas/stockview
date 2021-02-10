@@ -1,0 +1,287 @@
+.navbar {
+    counter-reset: item 0;
+    color: var(--color-txt-pm-1);
+    font-family: var(--font-mons);
+    background-color: var(--color-bg);
+    padding: 40px 50px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.5s ease;
+    z-index: 112;
+    -webkit-box-pack: justify;
+    -webkit-box-align: center;
+    @media (max-width: 768px) {
+        padding: 0 40px;
+    }
+}
+
+.navbar_wrapper {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    @media(max-width: 768px) {
+        display: none;
+    }
+}
+
+.navbar_ordered_list {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+}
+
+.navbar_list {
+    font-size: var(--font-size-l);
+    float: left;
+    margin: 0 15px;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.navbar_list a {
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.navbar_fixed {
+    top: 0;
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    animation: popDown 0.5s;
+}
+
+.navbar_shadow {
+    box-shadow: 0 10px 30px -10px var(--color-bg-shadow);
+    /* transition: all 200ms ease-in; */
+    height: var(--nav-height-scroll);
+}
+
+.navbar_at_top {
+    height: var(--nav-height);
+    transition: all 0.5s ease;
+}
+
+.navbar_active {
+    /* background-color: none;
+    backdrop-filter: blur(10px); */
+    visibility: visible;
+    /* transition: all 200ms ease-in; */
+}
+
+.navbar_hidden {
+    visibility: hidden;
+    /* transition: all 200ms ease-out; */
+    transform: translate(0, -100%);
+}
+
+.logo {
+    height: 3.2em;
+}
+
+.logo:hover {
+    cursor: pointer;
+    /* background-color: var(--color-bg-shadow); */
+}
+
+.logo_title {
+    margin-left: 5px;
+    color: var(--color-txt-pm-1);
+    font-size: var(--font-size-l);
+}
+
+.active_item {
+    border-bottom: 3px solid var(--color-txt-sc-1);
+    /* color: var(--color-txt-sc-1) */
+}
+
+.resume_button {
+    color: var(--color-txt-sc-2);
+    border: 2px solid var(--color-txt-sc-1);
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 15px;
+    transition: var(--transition);
+}
+
+.resume_button:hover {
+    cursor: pointer;
+    background-color: var(--color-bg-shadow);
+    color: var(--color-txt-sc-1);
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+
+/* @media screen and (max-width: 600px) {
+    .navbar {
+        display: none;
+    }
+} */
+
+// .overlay {
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     z-index: 999;
+//     /* sidebar must have z-index > 999 */
+//     background: white;
+//     opacity: 0;
+//     /* or background set to rgba(255, 255, 255, 0); */
+// }
+// HAMBURGER MENU
+.hamburger_button {
+    display: block;
+    position: relative;
+    // top: 50px;
+    // left: 50px;
+    z-index: 3;
+    -webkit-user-select: none;
+    user-select: none;
+    @media(min-width: 769px) {
+        display: none;
+    }
+}
+
+.hamburger_button a {
+    text-decoration: none;
+    color: #232323;
+    transition: color 0.3s ease;
+}
+
+.hamburger_button a:hover {
+    color: tomato;
+}
+
+.hamburger_button input {
+    display: block;
+    width: 37px;
+    height: 30px;
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    cursor: pointer;
+    /* hide this */
+    opacity: 0;
+    /* and place it over the hamburger */
+    z-index: 2;
+    -webkit-touch-callout: none;
+}
+
+
+/*
+ * Just a quick hamburger
+ */
+
+.hamburger_button span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    margin-bottom: 5px;
+    position: relative;
+    background: var(--color-txt-pm-1);
+    border-radius: 3px;
+    z-index: 1;
+    transform-origin: 4px 0px;
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0), background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0), opacity 0.55s ease;
+}
+
+.hamburger_button span:first-child {
+    transform-origin: 0% 0%;
+}
+
+.hamburger_button span:nth-last-child(2) {
+    transform-origin: 0% 100%;
+}
+
+
+/* 
+ * Transform all the slices of hamburger
+ * into a crossmark.
+ */
+
+.hamburger_button input:checked~span {
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: var(--color-txt-sc-1);
+}
+
+
+/*
+ * But let's hide the middle one.
+ */
+
+.hamburger_button input:checked~span:nth-last-child(3) {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+
+/*
+ * Ohyeah and the last one should go the other direction
+ */
+
+.hamburger_button input:checked~span:nth-last-child(2) {
+    transform: rotate(-45deg) translate(0, -1px);
+}
+
+// .hamburger_button input:checked+body#content {
+//     filter: blur(5px) brightness(0.7);
+//     transition: var(--transition);
+//     pointer-events: none;
+//     user-select: none;
+//     overflow: hidden;
+// }
+
+/*
+ * Make this absolute positioned
+ * at the top left of the screen
+ */
+
+.hamburger_menu {
+    position: fixed;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    // left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    backdrop-filter: blur(1px);
+    // display: flex;
+    // margin: -100px 0 0 -200px;
+    // padding: 50px;
+    // padding-top: 125px;
+    background: #ededed;
+    list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+    /* to stop flickering of text in safari */
+    transform-origin: 0% 0%;
+    transform: translate(100%, 0);
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+}
+
+.hamburger_menu li {
+    padding: 10px 0;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.hamburger_menu li:first-child {
+    margin-top: var(--nav-height);
+}
+
+
+/*
+  * And let's slide it in from the left
+  */
+
+.hamburger_button input:checked~ul {
+    transform: none;
+}

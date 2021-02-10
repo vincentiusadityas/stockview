@@ -1,0 +1,118 @@
+.stock_thumb_api {
+    color: var(--color-txt-sc-2);
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.stock_thumb_row {
+    margin-bottom: 5px;
+}
+
+.stock_thumb_label {
+    margin: 0;
+}
+
+.stock_thumb_col {
+    margin-bottom: 5px;
+}
+
+.stock_thumb_form_control {
+    color: #E1B032;
+    background-color: #1C1C1C;
+    border: 1px solid #E17232;
+}
+
+.stock_thumb_currency_card {
+    background-color: var(--color-bg-2);
+    // float: right;
+    // width: 350px;
+    margin-left: 50px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 4px 0 8px 0 var(--color-bg-shadow);
+    transition: 0.3s;
+    height: fit-content;
+    @media(max-width: 992px) {
+        margin-left: 0;
+        margin-top: 30px;
+        display: flex!important;
+        justify-content: center!important;
+    }
+}
+
+.stock_thumb_input_loading {
+    position: absolute;
+    z-index: 99;
+    top: 45%;
+    left: 47%;
+    opacity: 1;
+    color: var(--color-txt-sc-1)
+}
+
+.spinner_overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparentize($color: #1C1C1C, $amount: 0);
+    opacity: 0.8;
+    z-index: 2;
+}
+
+.stock_thumb_input_container {
+    position: relative;
+    // opacity: 0.2;
+}
+
+.stock_thumb_card {
+    background-color: var(--color-bg-2);
+    // width: 350px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 4px 0 8px 0 var(--color-bg-shadow);
+    transition: 0.3s;
+    height: fit-content;
+    @media(max-width: 992px) {
+        margin-left: 0;
+        display: flex!important;
+        justify-content: center!important;
+    }
+}
+
+.stock_thumb_card_container {
+    position: relative;
+    // opacity: 0.2;
+}
+
+.stock_thumb_card_loading {
+    position: absolute;
+    z-index: 99;
+    top: 40%;
+    left: 47%;
+    opacity: 1;
+    color: var(--color-txt-sc-1)
+}
+
+.stock_thumb_card_title {
+    font-size: clamp(var(--font-size-s), 2vw, var(--font-size-l));
+}
+
+.stock_thumb_card_exchange {
+    font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));
+    color: var(--color-txt-sc-2);
+}
+
+.stock_thumb_card_industry {
+    margin-left: 10px;
+}
+
+.stock_thumb_card_badge {
+    color: var(--color-txt-sc-2);
+    font-weight: 100;
+    border: 1px solid var(--color-txt-sc-1);
+    padding-bottom: 3px;
+}

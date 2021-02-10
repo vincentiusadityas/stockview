@@ -1,16 +1,80 @@
+:root {
+    --color-bg: #1C1C1C;
+    --color-bg-shadow: #0d0d0d;
+    --color-bg-2: #091F3A;
+    --color-txt-pm-1: #3DB4E5;
+    --color-txt-pm-2: #7546F9;
+    --color-txt-sc-1: #E17232;
+    --color-txt-sc-2: #E1B032;
+    --color-shadow: #0aafe6;
+    --font-sans: "Calibre", "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
+    --font-mono: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+    --font-mons: "Montserrat";
+    --font-size-xxxs: 10px;
+    --font-size-xxs: 12px;
+    --font-size-xs: 13px;
+    --font-size-s: 14px;
+    --font-size-m: 16px;
+    --font-size-l: 20px;
+    --font-size-l2: 24px;
+    --font-size-xl: 26px;
+    --font-size-xxl: 30px;
+    --font-size-xxxl: 40px;
+    --font-size-xxxxl: 50px;
+    --font-size-xxxxxl: 55px;
+    --nav-height: 100px;
+    --nav-height-scroll: 70px;
+    --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    /* height: 100vh; */
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-mons);
+    color: var(--color-txt-pm-1);
+    background-color: var(--color-bg);
+    font-size: 100%;
+    scroll-behavior: smooth;
+    counter-reset: nav-item;
+    /* overflow:visible; */
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: var(--color-txt-1);
+    /* font-size: var(--font-size-m); */
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-txt-sc-2);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#content {
+    /* overflow: hidden; */
+    /* filter: blur(5px) brightness(0.7); */
+    margin-left: 50px;
+    margin-right: 50px;
+    border-left: 1px solid var(--color-txt-pm-1);
+    border-right: 1px solid var(--color-txt-pm-1);
+    transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+    #content {
+        margin-left: 30px;
+        margin-right: 30px;
+        border: none;
+    }
+}
+
+select {
+    text-overflow: ellipsis;
 }
