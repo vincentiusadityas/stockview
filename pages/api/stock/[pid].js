@@ -10,7 +10,7 @@ export default async (req, res) => {
     const constants = getAllConstants()
 
     const {
-        query: { pid, exchange, symbol },
+        query: { pid, exchange, stock, security },
       } = req
 
     const param = pid_to_const[pid]
@@ -19,16 +19,25 @@ export default async (req, res) => {
     if (pid === "symbol") {
       API_URL = constants[param] + exchange + "&token=" + process.env.FINNHUB_API_KEY
     } else if (pid === "profile"){
-      API_URL = constants[param] + symbol + "&token=" + process.env.FINNHUB_API_KEY
+      API_URL = constants[param] + stock + "&token=" + process.env.FINNHUB_API_KEY
     } else if (pid === "thumbnail_data") {
-      const newData = []
+      const ticker = stock.split(".")[0]
+      console.log(security+":"+ticker)
 
       const SPREADSHEET_ID = process.env.SPREADSHEET_ID
       const CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL
       const PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY.replace(/\\n/g, '\n');
 
-      appendSpreadsheet(newData, SPREADSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY);
-      // await newSheet.delete();
+      try {
+        const {data, type} = await appendSpreadsheet(security, ticker, SPREADSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY);
+        console.log("data:", data)
+        console.log("type:", type)
+      } catch (e) {
+        if (e === "Error: Data Not Found") {
+          console.log("not founddddd")
+        }
+      }
+
     } else {
       // const data = "null"
       // return res.status(200).json({ data })

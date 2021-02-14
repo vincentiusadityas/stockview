@@ -1,8 +1,11 @@
 import styles from './Stock.module.scss'
 import React, {useState} from 'react'
-import { Container, Row, Col, Card, Form, Spinner, Badge } from 'react-bootstrap'
-import { getSymbol, getProfile } from '../lib/stock'
-import useSWR from 'swr'
+import { Container, Row, Col, Card, Form, Spinner, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { getStockList, getProfile, getThumbnailData } from '../lib/stock'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart as fasHeart, faExpandAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as farHeart} from '@fortawesome/free-regular-svg-icons'
 
 export function StockThumbnail({ constants }) {
     const regions = constants["EXCHANGES_REGIONS"]
@@ -11,11 +14,16 @@ export function StockThumbnail({ constants }) {
     const [securities, setSecurities] = useState([])
     const [selectedSecurity, setSelectedSecurity] = useState({})    // will be a dictionary
     const [selectedSecurityIdx, setSelectedSecurityIdx] = useState("-1")
-    const [selectedStock, setSelectedStock] = useState("")
+    const [selectedStock, setSelectedStock] = useState(null)
 
-    const { data: stockList, isLoading: isLoadingStockList } = getSymbol(selectedSecurity? selectedSecurity.finnhub_code : null)
+    // const { data: stockList, isLoading: isLoadingStockList } = getStockList(selectedSecurity? selectedSecurity.finnhub_code : null)
+    const [stockList, setStockList] = useState([])
+    const [isLoadingStockList, setIsLoadingStockList] = useState(false)
+    // const { data: stockList, isLoading: isLoadingStockList } = getStockList(selectedSecurity)
     
-    const { data: stock, isLoading: isLoadingStock } = getProfile(selectedStock)
+    // const { data: stock, isLoading: isLoadingStock } = getProfile(selectedStock)
+    const [stockProfile, setStockProfile] = useState({})
+    const [isLoadingStockProfile, setIsLoadingStockProfile] = useState(false)
 
     const handleSelectRegion = (event) => {
         setSelectedRegion(event.target.value)
@@ -30,9 +38,14 @@ export function StockThumbnail({ constants }) {
 
     const handleSelectStock = (event) => {
         console.log(event.target.value)
-        setSelectedStock(event.target.value)
+        if (event.target.value == "") {
+            // setShouldFetchData(false)
+        } else {
+            setSelectedStock(event.target.value)
+            // setShouldFetchData(true)
+        }
     }
-
+    
     React.useEffect(() => {
         if (selectedRegion) {
             if (selectedRegion === "-1") {
@@ -45,22 +58,25 @@ export function StockThumbnail({ constants }) {
         } 
     }, [selectedRegion])
 
-    React.useEffect(() => {
-        if (stockList) {
-            if (stockList.data) {
-                // console.log("stock:", stocks.data)
-            }
-        } else {
-            console.log("hehehe")
-        }
-    }, [stockList])
+    React.useEffect(async () => {
+        setIsLoadingStockList(true)
 
-    React.useEffect(() => {
-        if (stock) {
-            console.log("STOCK:", stock.data)
+        const { data, isLoading } = await getStockList(selectedSecurity)
 
-        }
-    }, [stock])
+        setStockList(data)
+        setIsLoadingStockList(isLoading)
+    }, [selectedSecurity])
+
+    React.useEffect(async () => {
+        setIsLoadingStockProfile(true)
+        
+        const { data: profileData, isLoading } = await getProfile(selectedStock)
+        const { data, isLoading: isLoadingThumbnailData } = await getThumbnailData(selectedSecurity, selectedStock)
+
+        setStockProfile(profileData)
+        setIsLoadingStockProfile(isLoading)
+
+    }, [selectedStock])
 
     return (
         <>
@@ -105,16 +121,16 @@ export function StockThumbnail({ constants }) {
                                 <Col lg={12} className={styles.stock_thumb_col}>
                                     <Form.Label className={styles.stock_thumb_label}>Stock</Form.Label>
                                     <Form.Control className={styles.stock_thumb_form_control} size="sm" as="select" onChange={handleSelectStock}>
-                                        {stockList && stockList.data ?
-                                            stockList.data.length === 0 ?
+                                        {stockList ?
+                                            stockList.length === 0 ?
                                             <option value="">Choose Security First...</option>
                                             :
                                             <option value="">Choose Stock...</option>
                                         :
                                         <option value="">Choose Security First...</option>
                                         }
-                                        {stockList && stockList.data ?
-                                            stockList.data.map((item, idx) => {
+                                        {stockList ?
+                                            stockList.map((item, idx) => {
                                                 return <option value={item.symbol} key={idx}>{item.description}</option>
                                             })
                                         :
@@ -125,7 +141,7 @@ export function StockThumbnail({ constants }) {
                             </Form.Row>
                         </div>
                         <div className={styles.stock_thumb_card_container}>
-                            {isLoadingStock ?
+                            {isLoadingStockProfile ?
                             <>
                                 <div className={styles.spinner_overlay}></div>
                                 <Spinner className={styles.stock_thumb_card_loading} animation="border"/>                       
@@ -135,36 +151,73 @@ export function StockThumbnail({ constants }) {
                             }
                             <Card className={styles.stock_thumb_card}>
                                 <Card.Body>
-                                    {stock && stock.data && Object.keys(stock.data).length !== 0 ?
-                                    <>
-                                        <Card.Text>
-                                            <div className={styles.stock_thumb_card_title}>
-                                                {stock.data.name}
-                                            </div>
-                                            <div className={styles.stock_thumb_card_exchange}>
-                                                {stock.data.exchange}
-                                                <span className={styles.stock_thumb_card_industry}>
-                                                    <Badge pill className={styles.stock_thumb_card_badge}>
-                                                        {stock.data.finnhubIndustry}
-                                                    </Badge>
-                                                </span>
-                                            </div>
-                                        </Card.Text>
-                                    </>
-                                    :
-                                        selectedStock ?
+                                    <Row>
+                                        <Col lg={10} md={10} sm={10}>
+                                            {stockProfile && Object.keys(stockProfile).length !== 0 ?
+                                            <>
+                                                <div className={styles.stock_thumb_card_title}>
+                                                    <a
+                                                        className={styles.stock_thumb_card_title_href}
+                                                        href={stockProfile.weburl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {stockProfile.name}
+                                                    </a>
+                                                </div>
+                                                <div className={styles.stock_thumb_card_exchange}>
+                                                    {stockProfile.exchange}
+                                                    <span className={styles.stock_thumb_card_industry}>
+                                                        <Badge pill className={styles.stock_thumb_card_badge}>
+                                                            {stockProfile.finnhubIndustry}
+                                                        </Badge>
+                                                    </span>
+                                                </div>
+                                            </>
+                                            :
+                                                selectedStock ?
+                                                <>
+                                                    <Card.Text>
+                                                        Stock data not found...
+                                                    </Card.Text>
+                                                </>
+                                                :
+                                                <>
+                                                    <Card.Text>
+                                                        Stock info will be shown here...
+                                                    </Card.Text>
+                                                </>
+                                            }
+                                        </Col>
+                                        {stockProfile && Object.keys(stockProfile).length !== 0 ?
                                         <>
-                                            <Card.Text>
-                                                Could not fetch stock data...
-                                            </Card.Text>
+                                            <Col lg={1} md={1} sm={1} className={styles.stock_thumb_card_icon_col}>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    delay={{ show: 50, hide: 50 }}
+                                                    overlay={<Tooltip id="button-tooltip-1">Click to save this stock!</Tooltip>}
+                                                >
+                                                    <div>
+                                                        <FontAwesomeIcon className={styles.stock_thumb_card_save + ' ' + styles.stock_thumb_card_faHeart} icon={farHeart} size="lg"/>
+                                                        <FontAwesomeIcon className={styles.stock_thumb_card_save_solid + ' ' + styles.stock_thumb_card_faHeart} icon={fasHeart} size="lg"/>
+                                                    </div>
+                                                </OverlayTrigger>
+                                            </Col>
+                                            <Col lg={1} md={1} sm={1} className={styles.stock_thumb_card_icon_col}>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    delay={{ show: 50, hide: 50 }}
+                                                    overlay={<Tooltip id="button-tooltip-2">Click to view more details!</Tooltip>}
+                                                >
+                                                    <FontAwesomeIcon icon={faExpandAlt} className={styles.stock_thumb_card_faExpandAlt} size="lg"/>
+                                                </OverlayTrigger>
+                                            </Col>
                                         </>
                                         :
-                                        <>
-                                            <Card.Text>
-                                                Stock info will be shown here...
-                                            </Card.Text>
-                                        </>
-                                    }
+                                        <></>
+                                        }
+                                    </Row>
+                                    
                                 </Card.Body>
                             </Card>
                         </div>

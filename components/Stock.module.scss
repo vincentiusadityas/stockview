@@ -101,6 +101,43 @@
     font-size: clamp(var(--font-size-s), 2vw, var(--font-size-l));
 }
 
+.stock_thumb_card_title_href:hover {
+    color: var(--color-txt-1);
+}
+
+.stock_thumb_card_icon_wrapper {
+    position: relative;
+}
+
+.stock_thumb_card_faHeart {
+    color: var(--color-txt-sc-1);
+    position: absolute;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.stock_thumb_card_save_solid {
+    opacity: 0;
+    transition: var(--transition);
+    &:hover {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+.stock_thumb_card_faExpandAlt {
+    transition: var(--transition);
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+}
+
+.stock_thumb_card_icon_col {
+    vertical-align: 0;
+}
+
 .stock_thumb_card_exchange {
     font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));
     color: var(--color-txt-sc-2);
