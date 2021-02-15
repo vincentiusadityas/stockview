@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Form, Spinner, Badge, OverlayTrigger, Toolti
 import { getStockList, getProfile, getThumbnailData } from '../lib/stock'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart as fasHeart, faExpandAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as fasHeart, faExpandAlt, faArrowDown, faArrowUp, faClock} from '@fortawesome/free-solid-svg-icons'
 import { faHeart as farHeart} from '@fortawesome/free-regular-svg-icons'
 
 export function StockThumbnail({ constants }) {
@@ -16,14 +16,14 @@ export function StockThumbnail({ constants }) {
     const [selectedSecurityIdx, setSelectedSecurityIdx] = useState("-1")
     const [selectedStock, setSelectedStock] = useState(null)
 
-    // const { data: stockList, isLoading: isLoadingStockList } = getStockList(selectedSecurity? selectedSecurity.finnhub_code : null)
     const [stockList, setStockList] = useState([])
     const [isLoadingStockList, setIsLoadingStockList] = useState(false)
-    // const { data: stockList, isLoading: isLoadingStockList } = getStockList(selectedSecurity)
     
-    // const { data: stock, isLoading: isLoadingStock } = getProfile(selectedStock)
     const [stockProfile, setStockProfile] = useState({})
     const [isLoadingStockProfile, setIsLoadingStockProfile] = useState(false)
+
+    const [stockData, setStockData] = useState({})
+    const [isLoadingStockData, setIsLoadingStockData] = useState(false)
 
     const handleSelectRegion = (event) => {
         setSelectedRegion(event.target.value)
@@ -31,18 +31,13 @@ export function StockThumbnail({ constants }) {
     }
 
     const handleSelectSecurity = (event) => {
-        console.log(constants["EXCHANGES"][selectedRegion][event.target.value])
         setSelectedSecurityIdx(event.target.value)
         setSelectedSecurity(constants["EXCHANGES"][selectedRegion][event.target.value])
     }
 
     const handleSelectStock = (event) => {
-        console.log(event.target.value)
-        if (event.target.value == "") {
-            // setShouldFetchData(false)
-        } else {
+        if (event.target.value !== "") {
             setSelectedStock(event.target.value)
-            // setShouldFetchData(true)
         }
     }
     
@@ -69,14 +64,43 @@ export function StockThumbnail({ constants }) {
 
     React.useEffect(async () => {
         setIsLoadingStockProfile(true)
-        
+        setIsLoadingStockData(true)
+
         const { data: profileData, isLoading } = await getProfile(selectedStock)
-        const { data, isLoading: isLoadingThumbnailData } = await getThumbnailData(selectedSecurity, selectedStock)
+        const { data, type, isLoading: isLoadingThumbnailData } = await getThumbnailData(selectedSecurity, selectedStock)
+
+        //TODO: show message depending on the type
 
         setStockProfile(profileData)
         setIsLoadingStockProfile(isLoading)
 
+        setStockData(data)
+        setIsLoadingStockData(isLoadingThumbnailData)
+
     }, [selectedStock])
+
+    const getDataSign = (strNum) => {
+        if (strNum !== "#N/A") {
+            const num = parseFloat(strNum)
+            if (num < 0) return "negative"
+            else if (num > 0) return "positive"
+            else return "neutral"
+        } else {
+            return strNum
+        }
+    }
+    
+    const convertToCurrency = (strNum) => {
+        if (strNum === "#N/A") return strNum
+        else return parseFloat(strNum).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    }
+
+    //TODO: SETUP REFRESH BUTTON for the thumbnail data
+    //TODO: SHOW CURRENCIES DATA
+    //TODO: FINDOUT the timezone for latest update
+    //TODO: SETUP SHOW MORE THUMBNAIL DATA (MAYBE GRAPH)
+    //TODO: SETUP SAVE STOCK AND SETUP A MY SAVED STOCK PAGE (use cache)
+    //TODO: SETUP ABOUT PAGE AND CONTACT PAGE
 
     return (
         <>
@@ -141,7 +165,7 @@ export function StockThumbnail({ constants }) {
                             </Form.Row>
                         </div>
                         <div className={styles.stock_thumb_card_container}>
-                            {isLoadingStockProfile ?
+                            {isLoadingStockProfile && isLoadingStockData ?
                             <>
                                 <div className={styles.spinner_overlay}></div>
                                 <Spinner className={styles.stock_thumb_card_loading} animation="border"/>                       
@@ -153,7 +177,9 @@ export function StockThumbnail({ constants }) {
                                 <Card.Body>
                                     <Row>
                                         <Col lg={10} md={10} sm={10}>
-                                            {stockProfile && Object.keys(stockProfile).length !== 0 ?
+                                            {stockProfile && stockData && 
+                                                Object.keys(stockProfile).length !== 0 &&
+                                                Object.keys(stockData).length !== 0 ?
                                             <>
                                                 <div className={styles.stock_thumb_card_title}>
                                                     <a
@@ -173,6 +199,62 @@ export function StockThumbnail({ constants }) {
                                                         </Badge>
                                                     </span>
                                                 </div>
+                                                <div className={styles.stock_thumb_card_price}>
+                                                    {convertToCurrency(stockData.price)}
+                                                    <span className={styles.stock_thumb_card_currency}>{' ' + stockData.currency}</span>
+                                                    <span className={styles.stock_thumb_card_pricec} data-sign={getDataSign(stockData.change)}>
+                                                        {parseInt(stockData.change).toFixed(2) + " (" + stockData.changepct + "%)"}
+                                                        <FontAwesomeIcon className={styles.stock_thumb_card_faArrowDown} icon={faArrowDown} size="sm"/>
+                                                        <FontAwesomeIcon className={styles.stock_thumb_card_faArrowUp} icon={faArrowUp} size="sm"/>
+                                                    </span>
+                                                </div>
+                                                <div className={styles.stock_thumb_card_latest_update}>
+                                                    <OverlayTrigger
+                                                        placement="top"
+                                                        delay={{ show: 50, hide: 50 }}
+                                                        overlay={<Tooltip id="button-tooltip-1">
+                                                                    The real-time data is delayed by {stockData.datadelay} mins.
+                                                                 </Tooltip>}
+                                                    >
+                                                        <FontAwesomeIcon className={styles.stock_thumb_card_faClock} icon={faClock} size="sm"/>
+                                                    </OverlayTrigger>
+                                                    Latest Update: 
+                                                    <span className={styles.stock_thumb_card_tradetime}>{" " + stockData.tradetime}</span>
+                                                </div>
+                                                <Row className={styles.stock_thumb_card_data}>
+                                                    <Col>
+                                                        <Row>
+                                                            PREV CLOSE:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{convertToCurrency(stockData.closeyest)}</span>
+                                                        </Row>
+                                                        <Row>
+                                                            OPEN:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{convertToCurrency(stockData.priceopen)}</span>
+                                                        </Row>
+                                                        <Row>
+                                                            HIGH:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{convertToCurrency(stockData.high)}</span>
+                                                        </Row>
+                                                        <Row>
+                                                            LOW:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{convertToCurrency(stockData.low)}</span>
+                                                        </Row>
+                                                    </Col>
+                                                    <Col>
+                                                        <Row>
+                                                            VOLUME:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{stockData.volume}</span>
+                                                        </Row>
+                                                        <Row>
+                                                            MARKET CAP:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{stockData.marketcap}</span>
+                                                        </Row>
+                                                        <Row>
+                                                            P/E:
+                                                            <span className={styles.stock_thumb_card_data_numbers}>{stockData.pe}</span>
+                                                        </Row>
+                                                    </Col>
+                                                </Row>
                                             </>
                                             :
                                                 selectedStock ?

@@ -105,10 +105,12 @@
     color: var(--color-txt-1);
 }
 
-.stock_thumb_card_icon_wrapper {
-    position: relative;
-}
-
+// .stock_thumb_card_icon_wrapper {
+//     // display: block;
+//     @media(min-width: 634px) {
+//         // display: none;
+//     }
+// }
 .stock_thumb_card_faHeart {
     color: var(--color-txt-sc-1);
     position: absolute;
@@ -136,6 +138,9 @@
 
 .stock_thumb_card_icon_col {
     vertical-align: 0;
+    @media(max-width: 634px) {
+        display: none;
+    }
 }
 
 .stock_thumb_card_exchange {
@@ -145,6 +150,10 @@
 
 .stock_thumb_card_industry {
     margin-left: 10px;
+    @media (max-width: 634px) {
+        display: block;
+        margin-left: 0;
+    }
 }
 
 .stock_thumb_card_badge {
@@ -152,4 +161,93 @@
     font-weight: 100;
     border: 1px solid var(--color-txt-sc-1);
     padding-bottom: 3px;
+}
+
+.stock_thumb_card_price {
+    font-size: clamp(var(--font-size-s), 2vw, var(--font-size-l));
+    @media (max-width: 634px) {
+        margin-top: 10px;
+    }
+}
+
+.stock_thumb_card_currency {
+    font-size: clamp(var(--font-size-xs), 1.3vw, var(--font-size-s));
+}
+
+.stock_thumb_card_faArrowUp,
+.stock_thumb_card_faArrowDown {
+    margin-left: 10px;
+}
+
+.stock_thumb_card_pricec {
+    font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));
+    margin-left: 15px;
+    &[data-sign="negative"] {
+        color: red;
+        .stock_thumb_card_faArrowUp {
+            display: none;
+        }
+        .stock_thumb_card_faArrowDown {
+            display: inline;
+        }
+    }
+    &[data-sign="positive"] {
+        color: green;
+        .stock_thumb_card_faArrowUp {
+            display: inline;
+        }
+        .stock_thumb_card_faArrowDown {
+            display: none;
+        }
+    }
+    &[data-sign="neutral"] {
+        color: var(--color-txt-sc-2);
+        .stock_thumb_card_faArrowUp {
+            display: none;
+        }
+        .stock_thumb_card_faArrowDown {
+            display: none;
+        }
+    }
+    @media (max-width: 634px) {
+        display: block;
+        margin-left: 0;
+    }
+}
+
+.stock_thumb_card_latest_update {
+    font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xxs));
+    color: var(--color-txt-sc-1);
+    margin-top: 2px;
+    @media (max-width: 634px) {
+        margin-top: 10px;
+    }
+}
+
+.stock_thumb_card_faClock {
+    margin-right: 5px;
+    transition: var(--transition);
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+}
+
+.stock_thumb_card_tradetime {
+    color: var(--color-txt-sc-2);
+}
+
+.stock_thumb_card_data {
+    font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));
+    margin: 5px 0 0 0;
+    padding: 0;
+    @media (max-width: 634px) {
+        display: block;
+        margin-top: 10px;
+    }
+}
+
+.stock_thumb_card_data_numbers {
+    color: var(--color-txt-sc-2);
+    margin-left: 4px;
 }

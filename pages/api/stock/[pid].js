@@ -22,7 +22,6 @@ export default async (req, res) => {
       API_URL = constants[param] + stock + "&token=" + process.env.FINNHUB_API_KEY
     } else if (pid === "thumbnail_data") {
       const ticker = stock.split(".")[0]
-      console.log(security+":"+ticker)
 
       const SPREADSHEET_ID = process.env.SPREADSHEET_ID
       const CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL
@@ -30,12 +29,16 @@ export default async (req, res) => {
 
       try {
         const {data, type} = await appendSpreadsheet(security, ticker, SPREADSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY);
-        console.log("data:", data)
-        console.log("type:", type)
+        // console.log("data:", data)
+        // console.log("type:", type)
+
+        return res.status(200).json({ data, type })
       } catch (e) {
         if (e === "Error: Data Not Found") {
           console.log("not founddddd")
         }
+
+        // return res.status(200).json()
       }
 
     } else {
