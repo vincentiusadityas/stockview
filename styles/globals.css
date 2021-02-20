@@ -62,6 +62,8 @@ a:hover {
     /* filter: blur(5px) brightness(0.7); */
     margin-left: 50px;
     margin-right: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
     border-left: 1px solid var(--color-txt-pm-1);
     border-right: 1px solid var(--color-txt-pm-1);
     transition: var(--transition);

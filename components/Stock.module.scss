@@ -235,6 +235,9 @@
 
 .stock_thumb_card_tradetime {
     color: var(--color-txt-sc-2);
+    @media (max-width: 634px) {
+        display: block;
+    }
 }
 
 .stock_thumb_card_data {
@@ -250,4 +253,57 @@
 .stock_thumb_card_data_numbers {
     color: var(--color-txt-sc-2);
     margin-left: 4px;
+}
+
+.stock_thumb_base_cur {
+    text-align: center;
+    text-align-last: center;
+    margin-bottom: 20px;
+}
+
+.stock_thumb_base_cur_label {
+    margin-bottom: 5px;
+}
+
+.stock_thumb_base_cur_input {
+    color: #E1B032;
+    background-color: var(--color-bg-2);
+    border: 1px solid #E17232;
+}
+
+.stock_thumb_compared_cur {
+    text-align: center;
+}
+
+.stock_thumb_compared_cur_label {
+    margin-bottom: 5px;
+}
+
+// .stock_thumb_compared_cur_list {
+//     background-color: var(--color-bg-2);
+// }
+.stock_thumb_compared_cur_list_item {
+    background-color: var(--color-bg-2);
+    font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));
+    color: var(--color-txt-sc-1);
+    @media(max-width: 540px) {
+        display: grid;
+        justify-items: center;
+    }
+}
+
+.stock_thumb_compared_cur_value {
+    color: var(--color-txt-sc-2);
+}
+
+.stock_thumb_compared_cur_item_remove {
+    float: left;
+    transition: var(--transition);
+    @media(max-width: 540px) {
+        margin-bottom: 5px;
+    }
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
 }

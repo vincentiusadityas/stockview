@@ -27,7 +27,7 @@ export default function Navbar({ showNav,
                             </Link>
                         </li>
                         <li className={styles.navbar_list}>
-                            <Link href="/#about">
+                            <Link href="/about">
                                 <a>About</a>
                             </Link>
                         </li>
@@ -52,7 +52,7 @@ export default function Navbar({ showNav,
                             </Link>
                         </li>
                         <li>
-                            <Link href="/">
+                            <Link href="/about">
                                 <a>About</a>
                             </Link>
                         </li>

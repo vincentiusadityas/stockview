@@ -1,20 +1,26 @@
 import styles from './Stock.module.scss'
 import React, {useState} from 'react'
-import { Container, Row, Col, Card, Form, Spinner, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import { getStockList, getProfile, getThumbnailData } from '../lib/stock'
+import { Container, Row, Col, Card, Form, Spinner, Badge, OverlayTrigger, Tooltip, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { getStockList, getProfile, getThumbnailData, getCurrencyData } from '../lib/stock'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as fasHeart, faExpandAlt, faArrowDown, faArrowUp, faClock} from '@fortawesome/free-solid-svg-icons'
-import { faHeart as farHeart} from '@fortawesome/free-regular-svg-icons'
+import { faHeart as farHeart, faTimesCircle} from '@fortawesome/free-regular-svg-icons'
 
-export function StockThumbnail({ constants }) {
+export function StockThumbnail({ constants, country }) {
     const regions = constants["EXCHANGES_REGIONS"]
+    const currency_codes = constants["CURRENCY_CODE"]
+
+    const [timezone, setTimezone] = useState(null)
 
     const [selectedRegion, setSelectedRegion] = useState("")    // will be a string
+
     const [securities, setSecurities] = useState([])
     const [selectedSecurity, setSelectedSecurity] = useState({})    // will be a dictionary
     const [selectedSecurityIdx, setSelectedSecurityIdx] = useState("-1")
+
     const [selectedStock, setSelectedStock] = useState(null)
+    const [selectedStockIdx, setSelectedStockIdx] = useState("-1")
 
     const [stockList, setStockList] = useState([])
     const [isLoadingStockList, setIsLoadingStockList] = useState(false)
@@ -25,14 +31,18 @@ export function StockThumbnail({ constants }) {
     const [stockData, setStockData] = useState({})
     const [isLoadingStockData, setIsLoadingStockData] = useState(false)
 
+    const [selectedCurrency, setSelectedCurrency] = useState(constants["COUNTRY_TO_CURRENCY_CODE"][country])
+    const [currencyData, setCurrencyData] = useState({})
+    const [isLoadingCurrencyData, setIsLoadingCurrencyData] = useState(false)
+
     const handleSelectRegion = (event) => {
         setSelectedRegion(event.target.value)
-
     }
 
     const handleSelectSecurity = (event) => {
         setSelectedSecurityIdx(event.target.value)
-        setSelectedSecurity(constants["EXCHANGES"][selectedRegion][event.target.value])
+        const security = constants["EXCHANGES"][selectedRegion][event.target.value]
+        setSelectedSecurity(security)
     }
 
     const handleSelectStock = (event) => {
@@ -40,6 +50,36 @@ export function StockThumbnail({ constants }) {
             setSelectedStock(event.target.value)
         }
     }
+
+    const handleSelectCurrency = (event) => {
+        setSelectedCurrency(event.target.value)
+    }
+
+    React.useEffect(async () => {
+        try {
+            const { data, isLoading } = await getCurrencyData(selectedCurrency)
+            setCurrencyData(data)
+            setIsLoadingCurrencyData(isLoading)
+            
+            const interval = setInterval(async () => {
+                const { data, isLoading } = await getCurrencyData(selectedCurrency)
+                setCurrencyData(data)
+                setIsLoadingCurrencyData(isLoading)
+            }, 300000);
+
+        
+            return () => clearInterval(interval);
+        } catch (e) {
+            console.log(e)
+        }
+    }, [])
+
+    React.useEffect(async () => {
+        setIsLoadingCurrencyData(true)
+        const { data, isLoading } = await getCurrencyData(selectedCurrency)
+        setCurrencyData(data)
+        setIsLoadingCurrencyData(isLoading)
+    }, [selectedCurrency])
     
     React.useEffect(() => {
         if (selectedRegion) {
@@ -56,8 +96,9 @@ export function StockThumbnail({ constants }) {
     React.useEffect(async () => {
         setIsLoadingStockList(true)
 
+        setSelectedStockIdx("-1")
         const { data, isLoading } = await getStockList(selectedSecurity)
-
+        
         setStockList(data)
         setIsLoadingStockList(isLoading)
     }, [selectedSecurity])
@@ -76,6 +117,16 @@ export function StockThumbnail({ constants }) {
 
         setStockData(data)
         setIsLoadingStockData(isLoadingThumbnailData)
+        
+        const tz = selectedSecurity['finnhub_timezone']
+        let options = {
+                        timeZone: tz,
+                        dateStyle: 'full', 
+                        timeStyle: 'long'
+                    },
+        formatter = new Intl.DateTimeFormat('en-GB', options);
+        const formattedDate = formatter.format(new Date())
+        setTimezone(formattedDate.split(' ').pop())
 
     }, [selectedStock])
 
@@ -90,14 +141,13 @@ export function StockThumbnail({ constants }) {
         }
     }
     
-    const convertToCurrency = (strNum) => {
+    const convertToCurrency = (strNum, fixedNum=2) => {
         if (strNum === "#N/A") return strNum
-        else return parseFloat(strNum).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+        else return parseFloat(strNum).toFixed(fixedNum).replace(/\d(?=(\d{3})+\.)/g, '$&,')
     }
 
     //TODO: SETUP REFRESH BUTTON for the thumbnail data
-    //TODO: SHOW CURRENCIES DATA
-    //TODO: FINDOUT the timezone for latest update
+    //TODO: SETUP ADD AND REMOVE BUTTON FOR CURRENCY DATA (user can choose which to show)
     //TODO: SETUP SHOW MORE THUMBNAIL DATA (MAYBE GRAPH)
     //TODO: SETUP SAVE STOCK AND SETUP A MY SAVED STOCK PAGE (use cache)
     //TODO: SETUP ABOUT PAGE AND CONTACT PAGE
@@ -144,7 +194,7 @@ export function StockThumbnail({ constants }) {
                             <Form.Row className={styles.stock_thumb_row}>
                                 <Col lg={12} className={styles.stock_thumb_col}>
                                     <Form.Label className={styles.stock_thumb_label}>Stock</Form.Label>
-                                    <Form.Control className={styles.stock_thumb_form_control} size="sm" as="select" onChange={handleSelectStock}>
+                                    <Form.Control className={styles.stock_thumb_form_control} size="sm" as="select" onChange={handleSelectStock} value={selectedStockIdx}>
                                         {stockList ?
                                             stockList.length === 0 ?
                                             <option value="">Choose Security First...</option>
@@ -219,7 +269,7 @@ export function StockThumbnail({ constants }) {
                                                         <FontAwesomeIcon className={styles.stock_thumb_card_faClock} icon={faClock} size="sm"/>
                                                     </OverlayTrigger>
                                                     Latest Update: 
-                                                    <span className={styles.stock_thumb_card_tradetime}>{" " + stockData.tradetime}</span>
+                                                    <span className={styles.stock_thumb_card_tradetime}>{" " + stockData.tradetime + " " + timezone}</span>
                                                 </div>
                                                 <Row className={styles.stock_thumb_card_data}>
                                                     <Col>
@@ -271,7 +321,9 @@ export function StockThumbnail({ constants }) {
                                                 </>
                                             }
                                         </Col>
-                                        {stockProfile && Object.keys(stockProfile).length !== 0 ?
+                                        {stockProfile && stockData && 
+                                            Object.keys(stockProfile).length !== 0 &&
+                                            Object.keys(stockData).length !== 0 ?
                                         <>
                                             <Col lg={1} md={1} sm={1} className={styles.stock_thumb_card_icon_col}>
                                                 <OverlayTrigger
@@ -308,10 +360,45 @@ export function StockThumbnail({ constants }) {
                         <Card className={styles.stock_thumb_currency_card}>
                             <Card.Header as="h5">Currencies</Card.Header>
                             <Card.Body>
-                                <Card.Title>Special title treatment</Card.Title>
-                                <Card.Text>
-                                    With supporting text below as a natural lead-in to additional content.
-                                </Card.Text>
+                                <div className={styles.stock_thumb_base_cur}>
+                                    <Form.Label className={styles.stock_thumb_base_cur_label}>Base Currency</Form.Label>
+                                    <Form.Control className={styles.stock_thumb_base_cur_input} size="sm" as="select" onChange={handleSelectCurrency} value={selectedCurrency}>
+                                        {Object.keys(currency_codes).map((keyName, idx) => {
+                                            return <option value={keyName} key={idx}>{keyName + " (" + currency_codes[keyName] +")"}</option>
+                                        })}
+                                    </Form.Control>
+                                </div>
+                                <div className={styles.stock_thumb_compared_cur}>
+                                    {!isLoadingCurrencyData && currencyData && Object.keys(currencyData).length !== 0?
+                                    <>
+                                        <div className={styles.stock_thumb_compared_cur_label}>Compared Currency</div>
+                                        <ListGroup className={styles.stock_thumb_compared_cur_list} variant="flush">
+                                            {Object.keys(currency_codes).map((keyName, idx) => {
+                                                if (keyName !== selectedCurrency) {
+                                                    return (
+                                                        <ListGroupItem className={styles.stock_thumb_compared_cur_list_item} key={idx}>
+                                                                    {/* <div>
+                                                                        <FontAwesomeIcon className={styles.stock_thumb_compared_cur_item_remove} icon={faTimesCircle} size="lg"/>                  
+                                                                    </div> */}
+                                                                    <div>
+                                                                        {selectedCurrency} &#8594; {keyName}
+                                                                    </div>
+                                                                    <div className={styles.stock_thumb_compared_cur_value}>
+                                                                        {convertToCurrency(currencyData[keyName], 3)}
+                                                                    </div>
+                                                        </ListGroupItem>
+                                                    )
+                                                }
+                                            })}
+                                        </ListGroup>                
+                                    </>
+                                    :
+                                    <>
+                                        <div className={styles.spinner_overlay}></div>
+                                        <Spinner className={styles.stock_thumb_card_loading} animation="border"/>  
+                                    </>
+                                    }
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
