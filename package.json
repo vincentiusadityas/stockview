@@ -1,26 +1,28 @@
 {
-  "name": "stock-view",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
-    "@fortawesome/free-regular-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/react-fontawesome": "^0.1.14",
-    "axios": "^0.21.1",
-    "google-spreadsheet": "^3.1.15",
-    "googleapis": "^39.2.0",
-    "next": "10.0.5",
-    "react": "17.0.1",
-    "react-bootstrap": "^1.4.3",
-    "react-dom": "17.0.1",
-    "sass": "^1.32.5",
-    "swr": "^0.4.1"
-  }
+    "name": "stock-view",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start"
+    },
+    "proxy": "https://stockview.vercel.app",
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^1.2.34",
+        "@fortawesome/free-brands-svg-icons": "^5.15.2",
+        "@fortawesome/free-regular-svg-icons": "^5.15.2",
+        "@fortawesome/free-solid-svg-icons": "^5.15.2",
+        "@fortawesome/react-fontawesome": "^0.1.14",
+        "axios": "^0.21.1",
+        "cors": "^2.8.5",
+        "google-spreadsheet": "^3.1.15",
+        "googleapis": "^39.2.0",
+        "next": "10.0.5",
+        "react": "17.0.1",
+        "react-bootstrap": "^1.4.3",
+        "react-dom": "17.0.1",
+        "sass": "^1.32.5",
+        "swr": "^0.4.1"
+    }
 }
