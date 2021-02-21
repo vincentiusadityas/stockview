@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Navbar from './navbar'
 import React, {useState, useRef} from 'react'
-import styles from './layout.module.scss'
+import styles from './Layout.module.scss'
 
 import { faGithub, faGitlab, faLinkedin, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
