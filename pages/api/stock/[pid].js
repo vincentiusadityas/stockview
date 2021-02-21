@@ -30,7 +30,7 @@ export default async (req, res) => {
 
       try {
         const {data, type} = await appendSpreadsheet(security, ticker, SPREADSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY);
-
+        console.log("test here")
         return res.status(200).json({ data, type })
       } catch (e) {
         if (e === "Error: Data Not Found") {
