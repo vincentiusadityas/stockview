@@ -1,39 +1,11 @@
 import axios from 'axios'
-import Cors from 'cors'
 import { getAllConstants, COUNTRY_TO_CURRENCY_CODE } from '../../../lib/constants'
 import { appendSpreadsheet, currencySpreadsheet } from '../../../lib/spreadsheet'
 
 const pid_to_const = {"profile": "FINNHUB_PROFILE2_API_URL",
 "symbol": "FINNHUB_SYMBOL_API_URL"}
 
-// Initializing the cors middleware
-const cors = Cors({
-  methods: ['GET', 'HEAD'],
-})
-
-// Helper method to wait for a middleware to execute before continuing
-// And to throw an error when an error happens in a middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result)
-      }
-
-      return resolve(result)
-    })
-  })
-}
-
 export default async (req, res) => {
-    // Run the middleware
-    // await runMiddleware(req, res, cors)
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PATCH, DELETE, OPTIONS"
-    );
   
     const constants = getAllConstants()
 
@@ -62,8 +34,9 @@ export default async (req, res) => {
         return res.status(200).json({ data, type })
       } catch (e) {
         if (e === "Error: Data Not Found") {
-          console.log("not founddddd")
+          console.log("Data Not Found")
         }
+        console.log(e)
         const data = {}
         return res.status(200).json({ data })
       }
