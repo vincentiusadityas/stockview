@@ -118,29 +118,9 @@
     text-decoration: none;
 }
 
-
-/* @media screen and (max-width: 600px) {
-    .navbar {
-        display: none;
-    }
-} */
-
-// .overlay {
-//     position: absolute;
-//     width: 100%;
-//     height: 100%;
-//     z-index: 999;
-//     /* sidebar must have z-index > 999 */
-//     background: white;
-//     opacity: 0;
-//     /* or background set to rgba(255, 255, 255, 0); */
-// }
-// HAMBURGER MENU
 .hamburger_button {
     display: block;
     position: relative;
-    // top: 50px;
-    // left: 50px;
     z-index: 3;
     -webkit-user-select: none;
     user-select: none;
@@ -231,13 +211,6 @@
     transform: rotate(-45deg) translate(0, -1px);
 }
 
-// .hamburger_button input:checked+body#content {
-//     filter: blur(5px) brightness(0.7);
-//     transition: var(--transition);
-//     pointer-events: none;
-//     user-select: none;
-//     overflow: hidden;
-// }
 
 /*
  * Make this absolute positioned
@@ -249,15 +222,10 @@
     width: 50%;
     height: 100%;
     top: 0;
-    // left: 0;
     right: 0;
     bottom: 0;
     margin: 0;
     backdrop-filter: blur(1px);
-    // display: flex;
-    // margin: -100px 0 0 -200px;
-    // padding: 50px;
-    // padding-top: 125px;
     background: #ededed;
     list-style-type: none;
     -webkit-font-smoothing: antialiased;

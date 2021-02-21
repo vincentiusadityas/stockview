@@ -30,8 +30,6 @@ export default async (req, res) => {
 
       try {
         const {data, type} = await appendSpreadsheet(security, ticker, SPREADSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY);
-        // console.log("data:", data)
-        // console.log("type:", type)
 
         return res.status(200).json({ data, type })
       } catch (e) {
@@ -60,7 +58,6 @@ export default async (req, res) => {
     return await axios
       .get(API_URL)
       .then(({ data }) => {
-        // console.log(data)
         res.status(200).json({ data })
       })
       .catch(({ err }) => {

@@ -26,8 +26,6 @@
 
 .stock_thumb_currency_card {
     background-color: var(--color-bg-2);
-    // float: right;
-    // width: 350px;
     margin-left: 50px;
     padding: 10px;
     border-radius: 10px;
@@ -64,12 +62,10 @@
 
 .stock_thumb_input_container {
     position: relative;
-    // opacity: 0.2;
 }
 
 .stock_thumb_card {
     background-color: var(--color-bg-2);
-    // width: 350px;
     margin-top: 20px;
     padding: 10px;
     border-radius: 10px;
@@ -85,7 +81,6 @@
 
 .stock_thumb_card_container {
     position: relative;
-    // opacity: 0.2;
 }
 
 .stock_thumb_card_loading {
@@ -105,12 +100,6 @@
     color: var(--color-txt-1);
 }
 
-// .stock_thumb_card_icon_wrapper {
-//     // display: block;
-//     @media(min-width: 634px) {
-//         // display: none;
-//     }
-// }
 .stock_thumb_card_faHeart {
     color: var(--color-txt-sc-1);
     position: absolute;
@@ -279,9 +268,6 @@
     margin-bottom: 5px;
 }
 
-// .stock_thumb_compared_cur_list {
-//     background-color: var(--color-bg-2);
-// }
 .stock_thumb_compared_cur_list_item {
     background-color: var(--color-bg-2);
     font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));

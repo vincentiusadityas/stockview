@@ -150,7 +150,6 @@ export function StockThumbnail({ constants, country }) {
     //TODO: SETUP ADD AND REMOVE BUTTON FOR CURRENCY DATA (user can choose which to show)
     //TODO: SETUP SHOW MORE THUMBNAIL DATA (MAYBE GRAPH)
     //TODO: SETUP SAVE STOCK AND SETUP A MY SAVED STOCK PAGE (use cache)
-    //TODO: SETUP ABOUT PAGE AND CONTACT PAGE
 
     return (
         <>
@@ -403,10 +402,6 @@ export function StockThumbnail({ constants, country }) {
                         </Card>
                     </Col>
                 </Row>
-                {/* <Row>
-                    <Col>
-                    </Col>
-                </Row> */}
             </Container>
         </>
     )

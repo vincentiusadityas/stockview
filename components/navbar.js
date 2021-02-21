@@ -1,5 +1,4 @@
 import Link from 'next/link'
-// import styles from '../styles/Home.module.css'
 import styles from './Navbar.module.scss'
 import React, { useRef } from 'react'
 
@@ -7,7 +6,7 @@ export default function Navbar({ showNav,
                                 navIsAtTop, 
                                 showHamburgerMenu,
                                 handleChecked }) {
-    // console.log("show?", showNav)
+                                    
     const class1 = showNav? styles.navbar_active: styles.navbar_hidden
     const class2 = navIsAtTop? styles.navbar_at_top: styles.navbar_shadow
 
@@ -32,7 +31,7 @@ export default function Navbar({ showNav,
                             </Link>
                         </li>
                         <li className={styles.navbar_list}>
-                            <Link href="/#contact">
+                            <Link href="https://vincentiusadityas.dev/">
                                 <a>Contact</a>
                             </Link>
                         </li>

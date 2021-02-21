@@ -1,6 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a personal project developed by [vincentiusadtiyas.dev](https://vincentiusadityas.dev). It is made using [Next.js](https://nextjs.org/), bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## About
+
+StockView is a simple web app to fetch and show stock data.
+
+The app is deployed [here]().
+
+## API Used
+
+Several APIs are used in this project.
+
+- [Google Finance](https://support.google.com/docs/answer/3093281#) is used to get the stock data such as price open, price close, low, high, etc.
+- [Google Sheets API](https://developers.google.com/sheets/api) is used to write google finance formula and read result from the google spreadsheet.
+- [finnhub.io](https://finnhub.io/) is used to get the list of exchanges and stocks and get the company profile.
+- [ipinfo.io](https://ipinfo.io/) is used to get the user's current location (country).
+
+Take a look of the spreadsheet [here](https://docs.google.com/spreadsheets/d/e/2PACX-1vR7VIlkqf3uwbLRoBIxQMiBHej29iT4hG7MOc7yD_Hv2c_clo7IrkcQlybHUSQh3bNQh5zv3FqjLwrH/pubhtml)
+
+## How To
 
 First, run the development server:
 
@@ -12,11 +29,6 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
 ## Learn More
 

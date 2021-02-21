@@ -1,0 +1,36 @@
+.styled_content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 120px;
+}
+
+.about_row {
+    margin-bottom: 20px;
+}
+
+.about_title {
+    text-align: center;
+}
+
+.about_image {
+    width: 20vw;
+}
+
+.about_descr {
+    color: var(--color-txt-sc-1);
+    margin-top: 7px;
+}
+
+.about_link {
+    color: var(--color-txt-sc-2);
+}
+
+.about_api {
+    color: var(--color-txt-sc-1);
+}
+
+.about_source {
+    color: var(--color-txt-sc-1);
+    margin-top: 3px;
+}
