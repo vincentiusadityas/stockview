@@ -18,10 +18,10 @@ export default async (req, res) => {
     const SPREADSHEET_ID = process.env.SPREADSHEET_ID
     const CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL
     
-    let PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY.replace(/\\n/g, '\n')
-    if (process.env.NODE_ENV !== "production") {
-      PRIVATE_KEY = JSON.parse(process.env.GOOGLE_SHEET_PRIVATE_KEY_PROD)["PRIVATE_KEY"].replace(/\\n/g, '\n')
-    }
+    // let PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY.replace(/\\n/g, '\n')
+    // if (process.env.NODE_ENV !== "production") {
+    const PRIVATE_KEY = JSON.parse(process.env.GOOGLE_SHEET_PRIVATE_KEY)["PRIVATE_KEY"].replace(/\\n/g, '\n')
+    // }
 
     let API_URL = ""
 
