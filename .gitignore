@@ -35,3 +35,5 @@ yarn-error.log*
 
 # google sheet api data
 stock-view-304511-d3711c6e2c30.json
+
+.vercel

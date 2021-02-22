@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getAllConstants, COUNTRY_TO_CURRENCY_CODE } from '../../../lib/constants'
+import { getAllConstants } from '../../../lib/constants'
 import { appendSpreadsheet, currencySpreadsheet } from '../../../lib/spreadsheet'
 
 const pid_to_const = {"profile": "FINNHUB_PROFILE2_API_URL",
@@ -17,7 +17,11 @@ export default async (req, res) => {
 
     const SPREADSHEET_ID = process.env.SPREADSHEET_ID
     const CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL
-    const PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY.replace(/\\n/g, '\n');
+    
+    let PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY.replace(/\\n/g, '\n')
+    if (process.env.NODE_ENV !== "production") {
+      PRIVATE_KEY = JSON.parse(process.env.GOOGLE_SHEET_PRIVATE_KEY_PROD)["PRIVATE_KEY"].replace(/\\n/g, '\n')
+    }
 
     let API_URL = ""
 
@@ -30,7 +34,7 @@ export default async (req, res) => {
 
       try {
         const {data, type} = await appendSpreadsheet(security, ticker, SPREADSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY);
-        console.log("test here")
+
         return res.status(200).json({ data, type })
       } catch (e) {
         if (e === "Error: Data Not Found") {
