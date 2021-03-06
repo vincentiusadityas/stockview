@@ -40,10 +40,11 @@ export default async (req, res) => {
 
         return res.status(200).json({ data, type })
       } catch (e) {
-        if (e === "Error: Data Not Found") {
-          console.log("Data Not Found")
+        if (e.message.includes("Data Not Found")) {
+          console.log("Stock Data Not Found")
+        } else {
+          console.log(e.message)
         }
-        console.log(e)
         const data = {}
         return res.status(200).json({ data })
       }
@@ -54,8 +55,10 @@ export default async (req, res) => {
 
         return res.status(200).json({ data })
       } catch (e) {
-        if (e === "Error: Data Not Found") {
-          console.log("not founddddd")
+        if (e.message.includes("Data Not Found")) {
+          console.log("Currency Data Not Found")
+        } else {
+          console.log(e.message)
         }
       }
     } else {

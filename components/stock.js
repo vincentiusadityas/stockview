@@ -48,6 +48,7 @@ export function StockThumbnail({ constants, country }) {
     const handleSelectStock = (event) => {
         if (event.target.value !== "") {
             setSelectedStock(event.target.value)
+            setSelectedStockIdx(event.target.value)
         }
     }
 
