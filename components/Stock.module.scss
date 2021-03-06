@@ -268,6 +268,10 @@
     margin-bottom: 5px;
 }
 
+.stock_thumb_compared_cur_list {
+    transition: var(--transition);
+}
+
 .stock_thumb_compared_cur_list_item {
     background-color: var(--color-bg-2);
     font-size: clamp(var(--font-size-xxs), 1.2vw, var(--font-size-xs));
@@ -291,5 +295,18 @@
     &:hover {
         cursor: pointer;
         transform: scale(1.2);
+    }
+}
+
+.stock_thumb_cur_show_more_less_btn {
+    margin-top: 5px;
+    font-size: var(--font-size-xxxs);
+    background-color: transparent;
+    color: var(--color-txt-sc-2);
+    border-color: var(--color-txt-pm-1);
+    &:hover {
+        cursor: pointer;
+        color: var(--color-txt-sc-1);
+        background-color: transparent;
     }
 }

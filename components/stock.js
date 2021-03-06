@@ -1,11 +1,12 @@
 import styles from './Stock.module.scss'
 import React, {useState} from 'react'
-import { Container, Row, Col, Card, Form, Spinner, Badge, OverlayTrigger, Tooltip, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Button, Container, Row, Col, Card, Form, Spinner, Badge, OverlayTrigger, Tooltip, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { getStockList, getProfile, getThumbnailData, getCurrencyData } from '../lib/stock'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as fasHeart, faExpandAlt, faArrowDown, faArrowUp, faClock} from '@fortawesome/free-solid-svg-icons'
 import { faHeart as farHeart, faTimesCircle} from '@fortawesome/free-regular-svg-icons'
+import e from 'cors'
 
 export function StockThumbnail({ constants, country }) {
     const regions = constants["EXCHANGES_REGIONS"]
@@ -34,6 +35,10 @@ export function StockThumbnail({ constants, country }) {
     const [selectedCurrency, setSelectedCurrency] = useState(constants["COUNTRY_TO_CURRENCY_CODE"][country])
     const [currencyData, setCurrencyData] = useState({})
     const [isLoadingCurrencyData, setIsLoadingCurrencyData] = useState(false)
+
+    const [showMoreCur, setShowMoreCur] = useState(true)
+    const [showLessCur, setShowLessCur] = useState(false)
+    const [numOfCurrShown, setNumOfCurrShown] = useState(3)
 
     const handleSelectRegion = (event) => {
         setSelectedRegion(event.target.value)
@@ -145,6 +150,16 @@ export function StockThumbnail({ constants, country }) {
     const convertToCurrency = (strNum, fixedNum=2) => {
         if (strNum === "#N/A") return strNum
         else return parseFloat(strNum).toFixed(fixedNum).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    }
+
+    const handleShowMoreLessButton = () => {
+        setShowMoreCur(!showMoreCur)
+        setShowLessCur(!showLessCur)
+        if (showMoreCur && !showLessCur) {
+            setNumOfCurrShown(Object.keys(currency_codes).length - 1)
+        } else {
+            setNumOfCurrShown(3)
+        }
     }
 
     //TODO: SETUP REFRESH BUTTON for the thumbnail data
@@ -371,9 +386,11 @@ export function StockThumbnail({ constants, country }) {
                                 <div className={styles.stock_thumb_compared_cur}>
                                     {!isLoadingCurrencyData && currencyData && Object.keys(currencyData).length !== 0?
                                     <>
-                                        <div className={styles.stock_thumb_compared_cur_label}>Compared Currency</div>
+                                        <div className={styles.stock_thumb_compared_cur_label}>
+                                            Compared Currency
+                                        </div>
                                         <ListGroup className={styles.stock_thumb_compared_cur_list} variant="flush">
-                                            {Object.keys(currency_codes).map((keyName, idx) => {
+                                            {Object.keys(currency_codes).slice(0, numOfCurrShown+1).map((keyName, idx) => {
                                                 if (keyName !== selectedCurrency) {
                                                     return (
                                                         <ListGroupItem className={styles.stock_thumb_compared_cur_list_item} key={idx}>
@@ -390,7 +407,13 @@ export function StockThumbnail({ constants, country }) {
                                                     )
                                                 }
                                             })}
-                                        </ListGroup>                
+                                        </ListGroup>
+                                        <Button className={styles.stock_thumb_cur_show_more_less_btn} onClick={handleShowMoreLessButton}>
+                                            {showMoreCur && !showLessCur ? "Show More"
+                                            :
+                                            "Show Less"
+                                            } 
+                                        </Button>               
                                     </>
                                     :
                                     <>
